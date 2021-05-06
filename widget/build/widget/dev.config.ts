@@ -1,4 +1,4 @@
-import merge from "webpack-merge";
+import { merge as webpackMerge } from 'webpack-merge';
 import path from "path";
 import webpack from "webpack";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
@@ -6,7 +6,7 @@ import ESLintPlugin from "eslint-webpack-plugin";
 
 import baseConfig from "./base.config"
 
-const config = merge(baseConfig, {
+const config = webpackMerge(baseConfig, {
   mode: "development",
   devtool: "inline-source-map",
   devServer: {

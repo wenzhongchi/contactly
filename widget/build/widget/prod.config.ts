@@ -1,10 +1,10 @@
-import merge from "webpack-merge";
+import { merge as webpackMerge } from 'webpack-merge';
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import ESLintPlugin from "eslint-webpack-plugin";
 
 import baseConfig from "./base.config"
 
-const config = merge(baseConfig, {
+const config = webpackMerge(baseConfig, {
   mode: "production",
   plugins: [
     new ForkTsCheckerWebpackPlugin({

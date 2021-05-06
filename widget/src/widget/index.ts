@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 const defaultStyles: any = {
   'border': 'none',
   'z-index': 2147483647,

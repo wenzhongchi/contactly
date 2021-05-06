@@ -7,8 +7,8 @@
   "author": "Rick Chi",
   "license": "ISC",
   "scripts": {
-    "start:widget": "webpack serve --config build/widget/dev.config.ts",
-    "build:widget": "webpack --config build/widget/prod.config.ts"
+    "start:widget": "webpack serve --mode development --config build/widget/dev.config.ts",
+    "build:widget": "webpack --mode production --config build/widget/prod.config.ts"
   },
   "dependencies": {
     "react": "^17.0.2",

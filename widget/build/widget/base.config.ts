@@ -11,7 +11,10 @@ const config: Configuration = {
   entry: "./src/widget/index.ts",
   output: {
     filename: 'widget.js',
-    path: path.resolve(__dirname, '../../dist')
+    path: path.resolve(__dirname, '../../dist'),
+    library: 'widget',
+    libraryTarget: 'umd',
+    libraryExport: 'default'
   },
   module: {
     rules: [
@@ -23,7 +26,6 @@ const config: Configuration = {
           options: {
             presets: [
               "@babel/preset-env",
-              "@babel/preset-react",
               "@babel/preset-typescript",
             ],
           },
