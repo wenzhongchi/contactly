@@ -3,7 +3,7 @@ import * as EventTypes from "@constant/events";
 
 const CONTACTLY_CONTAINER_ID = "contactly-container";
 const CONTACTLY_IFRAME_ID = "contactly-iframe";
-const CONTACTLY_IFRAME_URL = "http://localhost:4000/messenger.js";
+const CONTACTLY_IFRAME_URL = "http://localhost:4001/index.html";
 
 const defaultStyles: AnyObject = {
     border: "none",

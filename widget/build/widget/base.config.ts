@@ -11,7 +11,7 @@ const config: Configuration = {
     entry: "./src/widget/index.ts",
     output: {
         filename: "widget.js",
-        path: path.resolve(__dirname, "../../dist"),
+        path: path.resolve(__dirname, "../../dist/widget"),
         library: "widget",
         libraryTarget: "umd",
         libraryExport: "default",

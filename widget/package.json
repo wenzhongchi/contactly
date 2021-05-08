@@ -9,7 +9,9 @@
   "scripts": {
     "lint:ts": "eslint 'src/**/*.{ts,tsx,js,jsx}'",
     "start:widget": "webpack serve --mode development --config build/widget/dev.config.ts",
-    "build:widget": "webpack --mode production --config build/widget/prod.config.ts"
+    "build:widget": "webpack --mode production --config build/widget/prod.config.ts",
+    "start:messenger": "webpack serve --mode development --config build/messenger/dev.config.ts",
+    "build:messenger": "webpack --mode production --config build/messenger/prod.config.ts"
   },
   "dependencies": {
     "react": "^17.0.2",
@@ -25,6 +27,7 @@
     "@types/fork-ts-checker-webpack-plugin": "^0.4.5",
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.3",
+    "@types/terser-webpack-plugin": "^5.0.3",
     "@types/webpack": "^5.28.0",
     "@types/webpack-dev-server": "^3.11.3",
     "@typescript-eslint/eslint-plugin": "^4.22.1",
@@ -43,6 +46,7 @@
     "fork-ts-checker-webpack-plugin": "^6.2.6",
     "html-webpack-plugin": "^5.3.1",
     "prettier": "^2.2.1",
+    "terser-webpack-plugin": "^5.1.1",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4",
     "webpack": "^5.36.2",
