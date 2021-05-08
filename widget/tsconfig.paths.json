@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@type/*": ["./src/types/*"],
+            "@constant/*": ["./src/constant/*"]
+        }
+    }
+}

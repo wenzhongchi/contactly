@@ -3,39 +3,40 @@ import { Configuration as WebpackConfiguration } from "webpack";
 import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
 
 interface Configuration extends WebpackConfiguration {
-  devServer?: WebpackDevServerConfiguration;
+    devServer?: WebpackDevServerConfiguration;
 }
 
 const config: Configuration = {
-  mode: "development",
-  entry: "./src/widget/index.ts",
-  output: {
-    filename: 'widget.js',
-    path: path.resolve(__dirname, '../../dist'),
-    library: 'widget',
-    libraryTarget: 'umd',
-    libraryExport: 'default'
-  },
-  module: {
-    rules: [
-      {
-        test: /\.(ts|js)x?$/i,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: [
-              "@babel/preset-env",
-              "@babel/preset-typescript",
-            ],
-          },
+    mode: "development",
+    entry: "./src/widget/index.ts",
+    output: {
+        filename: "widget.js",
+        path: path.resolve(__dirname, "../../dist"),
+        library: "widget",
+        libraryTarget: "umd",
+        libraryExport: "default",
+    },
+    module: {
+        rules: [
+            {
+                test: /\.(ts|js)x?$/i,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: ["@babel/preset-env", "@babel/preset-typescript"],
+                    },
+                },
+            },
+        ],
+    },
+    resolve: {
+        extensions: [".tsx", ".ts", ".js"],
+        alias: {
+            "@type": path.resolve(__dirname, "../../src/types"),
+            "@constant": path.resolve(__dirname, "../../src/constant"),
         },
-      },
-    ],
-  },
-  resolve: {
-    extensions: [".tsx", ".ts", ".js"],
-  },
+    },
 };
 
 export default config;

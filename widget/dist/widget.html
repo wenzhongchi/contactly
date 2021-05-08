@@ -1,46 +1,47 @@
 <html>
-  <head>
-    <title>Getting Started</title>
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-  </head>
-  <body style="font-family: 'Nunito', sans-serif">
-    <h1>this is my cool webpage</h1>
-    <button onclick="weasl.login();">login</button>
-    <button onclick="weasl.logout();">logout</button>
-    <script>
-      (function (window, document) {
-        if (window.weasl) console.error("Weasl embed already included");
-        (window.weasl = {}),
-          (m = [
-            "init",
-            "login",
-            "signup",
-            "setAttribute",
-            "getCurrentUser",
-            "logout",
-            "debug",
-          ]);
-        window.weasl._c = [];
-        m.forEach(
-          (me) =>
-            (window.weasl[me] = function () {
-              window.weasl._c.push([me, arguments]);
-            })
-        );
-        var elt = document.createElement("script");
-        elt.type = "text/javascript";
-        elt.async = true;
-        elt.src = "widget.js";
-        var before = document.getElementsByTagName("script")[0];
-        before.parentNode.insertBefore(elt, before);
-      })(window, document, undefined);
-      weasl.init("cb4ebc07cd");
-      weasl.onEmailVerify = function () {
-        console.log("got the verified email");
-      };
-    </script>
-  </body>
+    <head>
+        <title>Getting Started</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    </head>
+    <body style="font-family: 'Nunito', sans-serif">
+        <h1>widget page</h1>
+        <button onclick="weasl.login();">login</button>
+        <button onclick="weasl.logout();">logout</button>
+        <script>
+            window.contactlySettings = {
+                appId: "123456",
+            };
+            (function () {
+                var ic = window.Contactly;
+                if (typeof ic === "function") {
+                    ic("reattach_activator");
+                    ic("update", window.contactlySettings);
+                } else {
+                    var i = function () {
+                        i.c(arguments);
+                    };
+                    i.q = [];
+                    i.c = function (args) {
+                        i.q.push(args);
+                    };
+                    window.Contactly = i;
+                    var load = function () {
+                        var element = document.createElement("script");
+                        element.type = "text/javascript";
+                        element.async = true;
+                        element.src = "widget.js";
+                        var before = document.getElementsByTagName("script")[0];
+                        before.parentNode.insertBefore(element, before);
+                    };
+                    if (document.readyState === "complete") {
+                        load();
+                    } else if (window.attachEvent) {
+                        window.attachEvent("onload", load);
+                    } else {
+                        window.addEventListener("load", load, false);
+                    }
+                }
+            })();
+        </script>
+    </body>
 </html>

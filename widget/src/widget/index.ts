@@ -1,5 +1,11 @@
-// eslint-disable-next-line
-const defaultStyles: any = {
+import { AnyObject } from "@type/types";
+import * as EventTypes from "@constant/events";
+
+const CONTACTLY_CONTAINER_ID = "contactly-container";
+const CONTACTLY_IFRAME_ID = "contactly-iframe";
+const CONTACTLY_IFRAME_URL = "http://localhost:4000/messenger.js";
+
+const defaultStyles: AnyObject = {
     border: "none",
     "z-index": 2147483647,
     height: "650px",
@@ -15,60 +21,95 @@ const defaultStyles: any = {
     bottom: "20px",
 };
 
-interface IConfig {
-    readonly email: string;
+export interface ISettings {
+    readonly appId: string;
 }
 
 interface IWidget {
-    config: IConfig | null;
-    iframe: HTMLIFrameElement | null;
-    init: (config: IConfig) => void;
+    iframe?: HTMLIFrameElement;
+    settings?: ISettings;
+    init: () => void;
     setupListeners: () => void;
     createIframe: () => void;
-    handleMessage: (event: MessageEvent) => void;
+    receiveMessage: (event: MessageEvent) => void;
 }
 
-const Widget: IWidget = {
-    iframe: null,
-    config: null,
+class Widget implements IWidget {
+    iframe?: HTMLIFrameElement;
 
-    init(config: IConfig) {
-        this.config = config;
+    settings?: ISettings;
+
+    init = () => {
+        this.settings = window.contactlySettings;
         this.createIframe();
-    },
+        this.createContainer();
+    };
 
-    createIframe() {
-        this.iframe = document.createElement("iframe");
-        let styles = "";
-        for (const key in defaultStyles) {
-            styles += `${key}: ${defaultStyles[key]};`;
+    createContainer = () => {
+        if (!document.getElementById(CONTACTLY_IFRAME_ID)) {
+            this.setupListeners();
+
+            // create a div container
+            const container = document.createElement("div");
+            container.id = CONTACTLY_CONTAINER_ID;
+            const styles = `z-index: ${Number.MAX_SAFE_INTEGER}; width: 0; height: 0; position: relative;`;
+            container.setAttribute("style", styles);
+
+            // load iframe
+            if (this.iframe) {
+                container.appendChild(this.iframe);
+            }
+            document.body.appendChild(container);
         }
-        this.iframe.setAttribute("style", styles);
-        this.iframe.src = "http://localhost:9000";
-        this.iframe.referrerPolicy = "origin";
-        document.body.appendChild(this.iframe);
-        this.setupListeners();
-    },
+    };
+
+    createIframe = () => {
+        if (!document.getElementById(CONTACTLY_IFRAME_ID)) {
+            const iframe = document.createElement("iframe");
+            let styles = "";
+            Object.keys(defaultStyles).forEach((key) => {
+                styles += `${key}: ${defaultStyles[key]};`;
+            });
+            iframe.setAttribute("style", styles);
+            iframe.src = CONTACTLY_IFRAME_URL;
+            iframe.referrerPolicy = "origin";
+            iframe.onload = () => {
+                if (this.iframe?.contentWindow)
+                    this.iframe.contentWindow.postMessage(
+                        {
+                            type: EventTypes.INIT_IFRAME,
+                            value: {
+                                appId: this.settings?.appId,
+                                host: window.location.host,
+                            },
+                        },
+                        "*",
+                    );
+            };
+            this.iframe = iframe;
+        }
+    };
 
     setupListeners() {
-        window.addEventListener("message", this.handleMessage.bind(this));
-    },
+        window.addEventListener("message", this.receiveMessage, false);
+    }
 
-    handleMessage(e) {
-        e.preventDefault();
-        if (!e.data || typeof e.data !== "string") return;
-        const data = JSON.parse(e.data);
-        switch (data.action) {
-            case "init": {
-                if (this.iframe && this.iframe.contentWindow) {
-                    this.iframe.contentWindow.postMessage(JSON.stringify(this.config), "*");
-                }
-                break;
+    receiveMessage = (event: MessageEvent) => {
+        if (event?.data?.type) {
+            switch (event.data.type) {
+                case EventTypes.INIT_IFRAME:
+                    document.cookie = event.data.value;
+                    break;
+                default:
+                    break;
             }
-            default:
-                break;
         }
-    },
+    };
+}
+
+const ContactlyWidget = () => {
+    const widget = new Widget();
+    widget.init();
 };
 
-export default Widget;
+export default ContactlyWidget();
