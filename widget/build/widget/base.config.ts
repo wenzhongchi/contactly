@@ -34,7 +34,7 @@ const config: Configuration = {
         extensions: [".tsx", ".ts", ".js"],
         alias: {
             "@type": path.resolve(__dirname, "../../src/types"),
-            "@constant": path.resolve(__dirname, "../../src/constant"),
+            "@constants": path.resolve(__dirname, "../../src/constants"),
         },
     },
 };

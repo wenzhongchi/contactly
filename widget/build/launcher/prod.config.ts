@@ -1,23 +1,13 @@
 import { merge as webpackMerge } from "webpack-merge";
-import path from "path";
-import webpack from "webpack";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import ESLintPlugin from "eslint-webpack-plugin";
+import TerserPlugin from "terser-webpack-plugin";
 
 import baseConfig from "./base.config";
 
 const config = webpackMerge(baseConfig, {
-    mode: "development",
-    devtool: "inline-source-map",
-    devServer: {
-        contentBase: path.join(__dirname, "../../dist/messenger"),
-        port: 4002,
-        open: true,
-        hot: true,
-        index: path.join(__dirname, "../../dist/messenger/index.html"),
-    },
+    mode: "production",
     plugins: [
-        new webpack.HotModuleReplacementPlugin(),
         new ForkTsCheckerWebpackPlugin({
             async: false,
         }),
@@ -25,6 +15,19 @@ const config = webpackMerge(baseConfig, {
             extensions: ["js", "jsx", "ts", "tsx"],
         }),
     ],
+    optimization: {
+        minimize: true,
+        minimizer: [
+            new TerserPlugin({
+                terserOptions: {
+                    format: {
+                        comments: false,
+                    },
+                },
+                extractComments: false,
+            }),
+        ],
+    },
 });
 
 export default config;

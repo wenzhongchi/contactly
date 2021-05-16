@@ -1,15 +1,17 @@
 import { AnyObject } from "@type/types";
-import * as EventTypes from "@constant/events";
+import * as EventTypes from "@constants/events";
 
 const CONTACTLY_CONTAINER_ID = "contactly-container";
-const CONTACTLY_IFRAME_ID = "contactly-iframe";
-const CONTACTLY_IFRAME_URL = "http://localhost:4001/index.html";
+const CONTACTLY_IFRAME_LAUNCHER_ID = "contactly-iframe-launcher";
+const CONTACTLY_IFRAME_LAUNCHER_URL = "http://localhost:4001/index.html";
+const CONTACTLY_IFRAME_MESSENGER_ID = "contactly-iframe-messenger";
+const CONTACTLY_IFRAME_MESSENGER_URL = "http://localhost:4002/index.html";
 
 const defaultStyles: AnyObject = {
     border: "none",
     "z-index": 2147483647,
-    height: "650px",
-    width: "350px",
+    height: "250px",
+    width: "400px",
     display: "block !important",
     visibility: "visible",
     background: "none transparent",
@@ -30,7 +32,8 @@ interface IWidget {
     settings?: ISettings;
     init: () => void;
     setupListeners: () => void;
-    createIframe: () => void;
+    createLauncher: () => void;
+    createMessenger: () => void;
     receiveMessage: (event: MessageEvent) => void;
 }
 
@@ -41,12 +44,12 @@ class Widget implements IWidget {
 
     init = () => {
         this.settings = window.contactlySettings;
-        this.createIframe();
+        this.createLauncher();
         this.createContainer();
     };
 
     createContainer = () => {
-        if (!document.getElementById(CONTACTLY_IFRAME_ID)) {
+        if (!document.getElementById(CONTACTLY_IFRAME_LAUNCHER_ID)) {
             this.setupListeners();
 
             // create a div container
@@ -63,15 +66,42 @@ class Widget implements IWidget {
         }
     };
 
-    createIframe = () => {
-        if (!document.getElementById(CONTACTLY_IFRAME_ID)) {
+    createLauncher = () => {
+        if (!document.getElementById(CONTACTLY_IFRAME_LAUNCHER_ID)) {
             const iframe = document.createElement("iframe");
             let styles = "";
             Object.keys(defaultStyles).forEach((key) => {
                 styles += `${key}: ${defaultStyles[key]};`;
             });
             iframe.setAttribute("style", styles);
-            iframe.src = CONTACTLY_IFRAME_URL;
+            iframe.src = CONTACTLY_IFRAME_LAUNCHER_URL;
+            iframe.referrerPolicy = "origin";
+            iframe.onload = () => {
+                if (this.iframe?.contentWindow)
+                    this.iframe.contentWindow.postMessage(
+                        {
+                            type: EventTypes.INIT_IFRAME,
+                            value: {
+                                appId: this.settings?.appId,
+                                host: window.location.host,
+                            },
+                        },
+                        "*",
+                    );
+            };
+            this.iframe = iframe;
+        }
+    };
+
+    createMessenger = () => {
+        if (!document.getElementById(CONTACTLY_IFRAME_MESSENGER_ID)) {
+            const iframe = document.createElement("iframe");
+            let styles = "";
+            Object.keys(defaultStyles).forEach((key) => {
+                styles += `${key}: ${defaultStyles[key]};`;
+            });
+            iframe.setAttribute("style", styles);
+            iframe.src = CONTACTLY_IFRAME_MESSENGER_URL;
             iframe.referrerPolicy = "origin";
             iframe.onload = () => {
                 if (this.iframe?.contentWindow)

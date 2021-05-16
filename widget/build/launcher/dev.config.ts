@@ -10,11 +10,11 @@ const config = webpackMerge(baseConfig, {
     mode: "development",
     devtool: "inline-source-map",
     devServer: {
-        contentBase: path.join(__dirname, "../../dist/messenger"),
-        port: 4002,
+        contentBase: path.join(__dirname, "../../dist/launcher"),
+        port: 4001,
         open: true,
         hot: true,
-        index: path.join(__dirname, "../../dist/messenger/index.html"),
+        index: path.join(__dirname, "../../dist/launcher/index.html"),
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),

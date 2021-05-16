@@ -10,12 +10,23 @@
     "lint:ts": "eslint 'src/**/*.{ts,tsx,js,jsx}'",
     "start:widget": "webpack serve --mode development --config build/widget/dev.config.ts",
     "build:widget": "webpack --mode production --config build/widget/prod.config.ts",
+    "start:launcher": "webpack serve --mode development --config build/launcher/dev.config.ts",
+    "build:launcher": "webpack --mode production --config build/launcher/prod.config.ts",
     "start:messenger": "webpack serve --mode development --config build/messenger/dev.config.ts",
     "build:messenger": "webpack --mode production --config build/messenger/prod.config.ts"
   },
   "dependencies": {
+    "@contactly-ui/avatar": "file:.yalc/@contactly-ui/avatar",
+    "@contactly-ui/button": "file:.yalc/@contactly-ui/button",
+    "@contactly-ui/card": "file:.yalc/@contactly-ui/card",
+    "@contactly-ui/flex": "file:.yalc/@contactly-ui/flex",
+    "@contactly-ui/input": "file:.yalc/@contactly-ui/input",
+    "@contactly-ui/text": "file:.yalc/@contactly-ui/text",
+    "@contactly-ui/theme": "file:.yalc/@contactly-ui/theme",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "styled-components": "^5.3.0",
+    "styled-system": "^5.1.5"
   },
   "devDependencies": {
     "@babel/core": "^7.14.0",

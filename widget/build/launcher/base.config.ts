@@ -7,9 +7,9 @@ interface Configuration extends WebpackConfiguration {
 
 const config: Configuration = {
     mode: "development",
-    entry: "./src/messenger/index.tsx",
+    entry: "./src/launcher/index.tsx",
     output: {
-        filename: "messenger.js",
+        filename: "launcher.js",
         path: path.resolve(__dirname, "../../dist"),
     },
     module: {
