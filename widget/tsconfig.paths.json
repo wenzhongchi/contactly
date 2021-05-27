@@ -4,7 +4,8 @@
         "paths": {
             "@type/*": ["./src/types/*"],
             "@constants/*": ["./src/constants/*"],
-            "@components/*": ["./src/components/*"]
+            "@components/*": ["./src/components/*"],
+            "@icons/*": ["./src/icons/*"]
         }
     }
 }

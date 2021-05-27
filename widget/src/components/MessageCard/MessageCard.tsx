@@ -11,6 +11,7 @@ const MessageCard: React.FC = () => (
             <Avatar
                 variant="xs"
                 src="https://cdn.iconscout.com/icon/free/png-512/boy-avatar-4-1129037.png"
+                boxShadow="elevation2"
             />
         </Flex>
         <Flex ml={16}>

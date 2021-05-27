@@ -7,7 +7,23 @@ const CONTACTLY_IFRAME_LAUNCHER_URL = "http://localhost:4001/index.html";
 const CONTACTLY_IFRAME_MESSENGER_ID = "contactly-iframe-messenger";
 const CONTACTLY_IFRAME_MESSENGER_URL = "http://localhost:4002/index.html";
 
-const defaultStyles: AnyObject = {
+const launcherStyles: AnyObject = {
+    border: "none",
+    "z-index": 2147483646,
+    height: "250px",
+    width: "400px",
+    display: "block !important",
+    visibility: "visible",
+    background: "none transparent",
+    opacity: 1,
+    "pointer-events": "auto",
+    "touch-action": "auto",
+    position: "fixed",
+    right: "20px",
+    bottom: "20px",
+};
+
+const messengerStyles: AnyObject = {
     border: "none",
     "z-index": 2147483647,
     height: "250px",
@@ -20,7 +36,7 @@ const defaultStyles: AnyObject = {
     "touch-action": "auto",
     position: "fixed",
     right: "20px",
-    bottom: "20px",
+    bottom: "120px",
 };
 
 export interface ISettings {
@@ -38,7 +54,9 @@ interface IWidget {
 }
 
 class Widget implements IWidget {
-    iframe?: HTMLIFrameElement;
+    launcherIframe?: HTMLIFrameElement;
+    messengerIframe?: HTMLIFrameElement;
+    container?: HTMLDivElement;
 
     settings?: ISettings;
 
@@ -59,10 +77,12 @@ class Widget implements IWidget {
             container.setAttribute("style", styles);
 
             // load iframe
-            if (this.iframe) {
-                container.appendChild(this.iframe);
+            if (this.launcherIframe) {
+                container.appendChild(this.launcherIframe);
             }
             document.body.appendChild(container);
+
+            this.container = container;
         }
     };
 
@@ -70,17 +90,17 @@ class Widget implements IWidget {
         if (!document.getElementById(CONTACTLY_IFRAME_LAUNCHER_ID)) {
             const iframe = document.createElement("iframe");
             let styles = "";
-            Object.keys(defaultStyles).forEach((key) => {
-                styles += `${key}: ${defaultStyles[key]};`;
+            Object.keys(launcherStyles).forEach((key) => {
+                styles += `${key}: ${launcherStyles[key]};`;
             });
             iframe.setAttribute("style", styles);
             iframe.src = CONTACTLY_IFRAME_LAUNCHER_URL;
             iframe.referrerPolicy = "origin";
             iframe.onload = () => {
-                if (this.iframe?.contentWindow)
-                    this.iframe.contentWindow.postMessage(
+                if (this.launcherIframe?.contentWindow)
+                    this.launcherIframe.contentWindow.postMessage(
                         {
-                            type: EventTypes.INIT_IFRAME,
+                            type: EventTypes.INIT_LAUNCHER_IFRAME,
                             value: {
                                 appId: this.settings?.appId,
                                 host: window.location.host,
@@ -89,7 +109,7 @@ class Widget implements IWidget {
                         "*",
                     );
             };
-            this.iframe = iframe;
+            this.launcherIframe = iframe;
         }
     };
 
@@ -97,17 +117,17 @@ class Widget implements IWidget {
         if (!document.getElementById(CONTACTLY_IFRAME_MESSENGER_ID)) {
             const iframe = document.createElement("iframe");
             let styles = "";
-            Object.keys(defaultStyles).forEach((key) => {
-                styles += `${key}: ${defaultStyles[key]};`;
+            Object.keys(messengerStyles).forEach((key) => {
+                styles += `${key}: ${messengerStyles[key]};`;
             });
             iframe.setAttribute("style", styles);
             iframe.src = CONTACTLY_IFRAME_MESSENGER_URL;
             iframe.referrerPolicy = "origin";
             iframe.onload = () => {
-                if (this.iframe?.contentWindow)
-                    this.iframe.contentWindow.postMessage(
+                if (this.messengerIframe?.contentWindow)
+                    this.messengerIframe.contentWindow.postMessage(
                         {
-                            type: EventTypes.INIT_IFRAME,
+                            type: EventTypes.OPEN_MESSENGER_IFRAME,
                             value: {
                                 appId: this.settings?.appId,
                                 host: window.location.host,
@@ -116,7 +136,11 @@ class Widget implements IWidget {
                         "*",
                     );
             };
-            this.iframe = iframe;
+            this.messengerIframe = iframe;
+
+            if (this.messengerIframe) {
+                this.container?.appendChild(this.messengerIframe);
+            }
         }
     };
 
@@ -127,8 +151,11 @@ class Widget implements IWidget {
     receiveMessage = (event: MessageEvent) => {
         if (event?.data?.type) {
             switch (event.data.type) {
-                case EventTypes.INIT_IFRAME:
+                case EventTypes.INIT_LAUNCHER_IFRAME:
                     document.cookie = event.data.value;
+                    break;
+                case EventTypes.OPEN_MESSENGER_IFRAME:
+                    this.createMessenger();
                     break;
                 default:
                     break;
