@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { motion } from "framer-motion";
 
 import { ThemeProvider } from "@contactly-ui/theme";
 import { IconButton } from "@contactly-ui/button";
@@ -25,8 +26,14 @@ const App: React.FC = () => {
     return (
         <ThemeProvider>
             <Flex flexDirection="column" alignItems="flex-end">
-                <MessageCard />
-                <MessageInput />
+                <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <MessageCard />
+                    <MessageInput />
+                </motion.div>
 
                 <IconButton
                     variant="primary"
