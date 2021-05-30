@@ -3,3 +3,4 @@ node_modules
 dist/widget.js
 
 .yalc
+.DS_Store

@@ -35,6 +35,7 @@ const config: Configuration = {
         alias: {
             "@type": path.resolve(__dirname, "../../src/types"),
             "@constants": path.resolve(__dirname, "../../src/constants"),
+            "@components": path.resolve(__dirname, "../../src/components"),
             "@icons": path.resolve(__dirname, "../../src/icons"),
         },
     },

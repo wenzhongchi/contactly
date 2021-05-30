@@ -4,7 +4,7 @@ import { Flex } from "@contactly-ui/flex";
 import { Card } from "@contactly-ui/card";
 import { Input } from "@contactly-ui/input";
 import { IconButton } from "@contactly-ui/button";
-import { IconSend } from "@contactly-ui/icons";
+import IconSend from "@contactly-ui/icons/dist/icons/Send";
 
 const MessageInput: React.FC = () => (
     <Flex flexDirection="column" alignItems="flex-end" mt={20}>

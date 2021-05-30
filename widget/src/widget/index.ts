@@ -26,8 +26,8 @@ const launcherStyles: AnyObject = {
 const messengerStyles: AnyObject = {
     border: "none",
     "z-index": 2147483647,
-    height: "250px",
-    width: "400px",
+    height: "965px",
+    width: "360px",
     display: "block !important",
     visibility: "visible",
     background: "none transparent",
@@ -57,7 +57,6 @@ class Widget implements IWidget {
     launcherIframe?: HTMLIFrameElement;
     messengerIframe?: HTMLIFrameElement;
     container?: HTMLDivElement;
-
     settings?: ISettings;
 
     init = () => {
@@ -95,6 +94,7 @@ class Widget implements IWidget {
             });
             iframe.setAttribute("style", styles);
             iframe.src = CONTACTLY_IFRAME_LAUNCHER_URL;
+            iframe.id = CONTACTLY_IFRAME_LAUNCHER_ID;
             iframe.referrerPolicy = "origin";
             iframe.onload = () => {
                 if (this.launcherIframe?.contentWindow)
@@ -122,6 +122,7 @@ class Widget implements IWidget {
             });
             iframe.setAttribute("style", styles);
             iframe.src = CONTACTLY_IFRAME_MESSENGER_URL;
+            iframe.id = CONTACTLY_IFRAME_MESSENGER_ID;
             iframe.referrerPolicy = "origin";
             iframe.onload = () => {
                 if (this.messengerIframe?.contentWindow)
@@ -144,6 +145,12 @@ class Widget implements IWidget {
         }
     };
 
+    closeMessenger = () => {
+        if (document.getElementById(CONTACTLY_IFRAME_MESSENGER_ID)) {
+            this.messengerIframe?.parentNode?.removeChild(this.messengerIframe);
+        }
+    };
+
     setupListeners() {
         window.addEventListener("message", this.receiveMessage, false);
     }
@@ -156,6 +163,9 @@ class Widget implements IWidget {
                     break;
                 case EventTypes.OPEN_MESSENGER_IFRAME:
                     this.createMessenger();
+                    break;
+                case EventTypes.CLOSE_MESSENGER_IFRAME:
+                    this.closeMessenger();
                     break;
                 default:
                     break;

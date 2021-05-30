@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { motion } from "framer-motion";
+import { createGlobalStyle } from "styled-components";
 
 import { ThemeProvider } from "@contactly-ui/theme";
 import { IconButton } from "@contactly-ui/button";
@@ -9,6 +9,14 @@ import * as EventTypes from "@constants/events";
 import MessageCard from "@components/MessageCard/MessageCard";
 import MessageInput from "@components/MessageInput/MessageInput";
 import MotionLogo from "@components/MotionLogo/MotionLogo";
+
+const GlobalStyle = createGlobalStyle`
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+`;
 
 const App: React.FC = () => {
     const [isMessengerOpen, setIsMessengerOpen] = useState<boolean | undefined>(undefined);
@@ -24,29 +32,26 @@ const App: React.FC = () => {
     }, []);
 
     return (
-        <ThemeProvider>
-            <Flex flexDirection="column" alignItems="flex-end">
-                <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                >
+        <React.Fragment>
+            <GlobalStyle />
+            <ThemeProvider>
+                <Flex flexDirection="column" alignItems="flex-end">
                     <MessageCard />
                     <MessageInput />
-                </motion.div>
 
-                <IconButton
-                    variant="primary"
-                    backgroundColor="button.widget"
-                    width="60px"
-                    height="60px"
-                    borderRadius="30px"
-                    mt="30px"
-                    onClick={isMessengerOpen ? handleCloseMessenger : handleOpenMessenger}
-                    icon={<MotionLogo isOpen={isMessengerOpen} />}
-                />
-            </Flex>
-        </ThemeProvider>
+                    <IconButton
+                        variant="primary"
+                        backgroundColor="button.widget"
+                        width="60px"
+                        height="60px"
+                        borderRadius="30px"
+                        mt="30px"
+                        onClick={isMessengerOpen ? handleCloseMessenger : handleOpenMessenger}
+                        icon={<MotionLogo isOpen={isMessengerOpen} />}
+                    />
+                </Flex>
+            </ThemeProvider>
+        </React.Fragment>
     );
 };
 

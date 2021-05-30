@@ -17,7 +17,7 @@ const MessageCard: React.FC = () => (
         <Flex ml={16}>
             <ArrowCard flexDirection="column" width="320px" padding="10px" variant="soft">
                 <Text variant="heading">Hi, How can i help you?</Text>
-                <Text variant="body">Have a question? Text us here</Text>
+                <Text variant="body-lg">Have a question? Text us here</Text>
             </ArrowCard>
         </Flex>
     </Flex>
