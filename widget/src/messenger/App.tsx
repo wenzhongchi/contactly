@@ -151,30 +151,33 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const App: React.FC = () => {
-    const [inChat, setInChat] = useState(true);
+    const [isChatting, setIsChatting] = useState(false);
+
+    const handleNewChat = useCallback(() => {
+        setIsChatting(true);
+    }, [setIsChatting]);
+
+    const handleBack = useCallback(() => {
+        setIsChatting(false);
+    }, [setIsChatting]);
 
     return (
         <React.Fragment>
             <GlobalStyle />
             <ThemeProvider>
-                {!inChat && (
+                {!isChatting && (
                     <PoweredCard>
                         <Flex flexDirection="column">
                             <Profile />
-                            <NewConversation />
+                            <NewConversation onClick={handleNewChat} />
                         </Flex>
                         <Conversations conversations={conversations} />
                         <Features features={features} />
                     </PoweredCard>
                 )}
-                {inChat && (
+                {isChatting && (
                     <ChatCard>
-                        <ChatHeader
-                            operator={operator}
-                            onBack={() => {
-                                console.log("hello");
-                            }}
-                        />
+                        <ChatHeader operator={operator} onBack={handleBack} />
                         <ChatBody messages={messages} />
                     </ChatCard>
                 )}

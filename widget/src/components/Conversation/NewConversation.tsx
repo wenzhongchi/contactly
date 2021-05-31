@@ -8,7 +8,11 @@ import { Text } from "@contactly-ui/text";
 import { Button } from "@contactly-ui/button";
 import IconMessageSquare from "@contactly-ui/icons/dist/icons/MessageSquare";
 
-const NewConversation: React.FC = () => (
+type NewConversationProps = {
+    onClick: () => void;
+};
+
+const NewConversation: React.FC<NewConversationProps> = ({ onClick }) => (
     <Flex flexDirection="column" alignItems="center" position="relative">
         <Box
             width="100%"
@@ -31,6 +35,7 @@ const NewConversation: React.FC = () => (
                 mt="20px"
                 borderRadius="24px"
                 leftIcon={<IconMessageSquare />}
+                onClick={onClick}
             />
         </Card>
     </Flex>
