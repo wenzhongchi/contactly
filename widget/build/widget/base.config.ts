@@ -10,7 +10,7 @@ const config: Configuration = {
     mode: "development",
     entry: "./src/widget/index.ts",
     output: {
-        filename: "widget.js",
+        filename: "./widget.js",
         path: path.resolve(__dirname, "../../dist/widget"),
         library: "widget",
         libraryTarget: "umd",

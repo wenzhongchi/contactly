@@ -34,7 +34,7 @@ const Conversation: React.FC<ConversationProps> = ({ conversation, onClick }) =>
             bg={isHovered ? "card.secondary" : "card.white"}
             css={{ cursor: "pointer" }}
             borderBottom={1}
-            borderColor="card.border"
+            borderColor="card.border-default"
             px="20px"
             py="14px"
             width="100%"

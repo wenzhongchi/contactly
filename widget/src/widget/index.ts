@@ -26,8 +26,8 @@ const launcherStyles: AnyObject = {
 const messengerStyles: AnyObject = {
     border: "none",
     "z-index": 2147483647,
-    height: "965px",
-    width: "360px",
+    height: "680px",
+    width: "375px",
     display: "block !important",
     visibility: "visible",
     background: "none transparent",

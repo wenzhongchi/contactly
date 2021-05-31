@@ -32,3 +32,19 @@ export type FeatureType = {
     type: FeatureTypeEnum;
     label: string;
 };
+
+export type OperatorType = {
+    id: string;
+    avatarUrl: string;
+    name: string;
+    active: boolean;
+};
+
+export type MessageType = {
+    id: string;
+    avatarUrl: string;
+    name: string;
+    message: string;
+    isOperator: boolean;
+    date: Date;
+};

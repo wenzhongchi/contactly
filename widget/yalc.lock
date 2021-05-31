@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "@contactly-ui/theme": {
-      "signature": "89602e5a8b0d07932232127781df4a57",
+      "signature": "95bc02d4f3dae86ec985fd4797d2152f",
       "file": true
     },
     "@contactly-ui/button": {
@@ -14,7 +14,7 @@
       "file": true
     },
     "@contactly-ui/card": {
-      "signature": "f9e024772cb637024a4f3f53ce6288b9",
+      "signature": "4624ac51b46db55ce25dd4a5d2619657",
       "file": true
     },
     "@contactly-ui/avatar": {

@@ -9,7 +9,7 @@ const config: Configuration = {
     mode: "development",
     entry: "./src/messenger/index.tsx",
     output: {
-        filename: "messenger.js",
+        filename: "./messenger.js",
         path: path.resolve(__dirname, "../../dist"),
     },
     module: {

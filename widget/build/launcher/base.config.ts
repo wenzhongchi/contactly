@@ -9,7 +9,7 @@ const config: Configuration = {
     mode: "development",
     entry: "./src/launcher/index.tsx",
     output: {
-        filename: "./launcher/launcher.js",
+        filename: "./launcher.js",
         path: path.resolve(__dirname, "../../dist"),
     },
     module: {
