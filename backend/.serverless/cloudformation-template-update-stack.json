@@ -1,0 +1,433 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "The AWS CloudFormation template for this Serverless application",
+  "Resources": {
+    "ServerlessDeploymentBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "ServerlessDeploymentBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "ServerlessDeploymentBucket"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      },
+                      "/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
+                }
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "AuthLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/contactly-ws-dev-auth"
+      }
+    },
+    "ConnectLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/contactly-ws-dev-connect"
+      }
+    },
+    "IamRoleLambdaExecution": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "contactly-ws",
+                  "dev",
+                  "lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/contactly-ws-dev*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/contactly-ws-dev*:*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "execute-api:ManageConnections"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:execute-api:*:*:*/@connections/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "Path": "/",
+        "RoleName": {
+          "Fn::Join": [
+            "-",
+            [
+              "contactly-ws",
+              "dev",
+              {
+                "Ref": "AWS::Region"
+              },
+              "lambdaRole"
+            ]
+          ]
+        }
+      }
+    },
+    "AuthLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/contactly-ws/dev/1622951810766-2021-06-06T03:56:50.766Z/auth.zip"
+        },
+        "Handler": ".bin/auth",
+        "Runtime": "go1.x",
+        "FunctionName": "contactly-ws-dev-auth",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SLS_DEBUG": "*",
+            "STAGE": "dev",
+            "AUTH_PRIVATE_KEY": "-----BEGIN RSA PRIVATE KEY-----\\nMIIBPAIBAAJBAMIHBa0wTDOK5liWGKwNC8/XmmVljnspRB7sVzA9wL2y5zVUmLDn\\nWTBxGWTxgCtpH0/y7X7PbaXqgkGWyp3B9D8CAwEAAQJBAJyMqenZBEK6Gaz0Pifj\\nxtoF7c9OJ63717jTnG2SBceH/jQzzrgXD3HZpPYkOm7B4Gs+V8SUMCapFFeuIg5c\\n+xECIQD3AoZ5jxOM7RtN4vIR9pc1hDiGdvCUS/6Uys71rcE4zQIhAMkW13EJzkL8\\nyqkqF8AlXWzTbo2hjdIpoNB18hGgRVE7AiAAqNoREwe7VZrAD34T/DOVKgA4o7Kq\\nwrUwUoZQ86DTdQIhAIfQRIwVClkV8S6VvlrJIbNJjcZckbOa6AFDV83tyENXAiEA\\noO8CxCz1/zM6Wp5gjc2Is5D/bGAUILOoUjnk8RSYURA=\\n-----END RSA PRIVATE KEY-----",
+            "AUTH_PUBLIC_KEY": "-----BEGIN PUBLIC KEY-----\\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAMIHBa0wTDOK5liWGKwNC8/XmmVljnsp\\nRB7sVzA9wL2y5zVUmLDnWTBxGWTxgCtpH0/y7X7PbaXqgkGWyp3B9D8CAwEAAQ==\\n-----END PUBLIC KEY-----",
+            "REFRESH_SECRET": "6bxrdKFN8Rcnm4UAHL4LvkXmRVSzHBZE",
+            "RESET_SECRET": "LR5UpgDDqKV34EDezd7jHhU8PqCV2Nvt",
+            "DB_HOST": "contactly-dev.czczei5vdxr3.us-east-1.rds.amazonaws.com",
+            "DB_PORT": "5432",
+            "DB_USER": "magician",
+            "DB_PASSWORD": "development",
+            "DB_NAME": "contactly"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "AuthLogGroup"
+      ]
+    },
+    "ConnectLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/contactly-ws/dev/1622951810766-2021-06-06T03:56:50.766Z/connect.zip"
+        },
+        "Handler": ".bin/connect",
+        "Runtime": "go1.x",
+        "FunctionName": "contactly-ws-dev-connect",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SLS_DEBUG": "*",
+            "STAGE": "dev",
+            "AUTH_PRIVATE_KEY": "-----BEGIN RSA PRIVATE KEY-----\\nMIIBPAIBAAJBAMIHBa0wTDOK5liWGKwNC8/XmmVljnspRB7sVzA9wL2y5zVUmLDn\\nWTBxGWTxgCtpH0/y7X7PbaXqgkGWyp3B9D8CAwEAAQJBAJyMqenZBEK6Gaz0Pifj\\nxtoF7c9OJ63717jTnG2SBceH/jQzzrgXD3HZpPYkOm7B4Gs+V8SUMCapFFeuIg5c\\n+xECIQD3AoZ5jxOM7RtN4vIR9pc1hDiGdvCUS/6Uys71rcE4zQIhAMkW13EJzkL8\\nyqkqF8AlXWzTbo2hjdIpoNB18hGgRVE7AiAAqNoREwe7VZrAD34T/DOVKgA4o7Kq\\nwrUwUoZQ86DTdQIhAIfQRIwVClkV8S6VvlrJIbNJjcZckbOa6AFDV83tyENXAiEA\\noO8CxCz1/zM6Wp5gjc2Is5D/bGAUILOoUjnk8RSYURA=\\n-----END RSA PRIVATE KEY-----",
+            "AUTH_PUBLIC_KEY": "-----BEGIN PUBLIC KEY-----\\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAMIHBa0wTDOK5liWGKwNC8/XmmVljnsp\\nRB7sVzA9wL2y5zVUmLDnWTBxGWTxgCtpH0/y7X7PbaXqgkGWyp3B9D8CAwEAAQ==\\n-----END PUBLIC KEY-----",
+            "REFRESH_SECRET": "6bxrdKFN8Rcnm4UAHL4LvkXmRVSzHBZE",
+            "RESET_SECRET": "LR5UpgDDqKV34EDezd7jHhU8PqCV2Nvt",
+            "DB_HOST": "contactly-dev.czczei5vdxr3.us-east-1.rds.amazonaws.com",
+            "DB_PORT": "5432",
+            "DB_USER": "magician",
+            "DB_PASSWORD": "development",
+            "DB_NAME": "contactly"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ConnectLogGroup"
+      ]
+    },
+    "AuthLambdaVersionXuJg60GJYPl1ZcPsaahnHMGBHuxzFA37HH4KjGfBdw": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "AuthLambdaFunction"
+        },
+        "CodeSha256": "haiEB96jVv0rFt5fp61aLoaJ5AbPK1qQDI80KJK+FXQ="
+      }
+    },
+    "ConnectLambdaVersionfBYz3uVmrszSfdgX8c6xNQbFeEaWEvNjHwCBXXEvs": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ConnectLambdaFunction"
+        },
+        "CodeSha256": "ljFcnTmVnGBiqGVw3ENnCu/qeUiFeIGooRwXvd/P+l8="
+      }
+    },
+    "WebsocketsApi": {
+      "Type": "AWS::ApiGatewayV2::Api",
+      "Properties": {
+        "Name": "dev-contactly-ws-websockets",
+        "RouteSelectionExpression": "$request.body.action",
+        "Description": "Serverless Websockets",
+        "ProtocolType": "WEBSOCKET"
+      }
+    },
+    "ConnectWebsocketsIntegration": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":apigateway:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":lambda:path/2015-03-31/functions/",
+              {
+                "Fn::GetAtt": [
+                  "ConnectLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "/invocations"
+            ]
+          ]
+        }
+      }
+    },
+    "ConnectLambdaPermissionWebsockets": {
+      "Type": "AWS::Lambda::Permission",
+      "DependsOn": [
+        "WebsocketsApi",
+        "ConnectLambdaFunction"
+      ],
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ConnectLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com"
+      }
+    },
+    "SconnectWebsocketsRoute": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "RouteKey": "$connect",
+        "AuthorizationType": "NONE",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "ConnectWebsocketsIntegration"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "WebsocketsDeploymentStage": {
+      "Type": "AWS::ApiGatewayV2::Stage",
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "StageName": "dev",
+        "Description": "Serverless Websockets",
+        "DeploymentId": {
+          "Ref": "WebsocketsDeployment7k92vEdlLlDQdLiJtatPmwu0BUayl9LxIl7HwkulsrY"
+        }
+      }
+    },
+    "WebsocketsDeployment7k92vEdlLlDQdLiJtatPmwu0BUayl9LxIl7HwkulsrY": {
+      "Type": "AWS::ApiGatewayV2::Deployment",
+      "DependsOn": [
+        "SconnectWebsocketsRoute"
+      ],
+      "Properties": {
+        "ApiId": {
+          "Ref": "WebsocketsApi"
+        },
+        "Description": "Serverless Websockets"
+      }
+    }
+  },
+  "Outputs": {
+    "ServerlessDeploymentBucketName": {
+      "Value": {
+        "Ref": "ServerlessDeploymentBucket"
+      },
+      "Export": {
+        "Name": "sls-contactly-ws-dev-ServerlessDeploymentBucketName"
+      }
+    },
+    "AuthLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "AuthLambdaVersionXuJg60GJYPl1ZcPsaahnHMGBHuxzFA37HH4KjGfBdw"
+      },
+      "Export": {
+        "Name": "sls-contactly-ws-dev-AuthLambdaFunctionQualifiedArn"
+      }
+    },
+    "ConnectLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ConnectLambdaVersionfBYz3uVmrszSfdgX8c6xNQbFeEaWEvNjHwCBXXEvs"
+      },
+      "Export": {
+        "Name": "sls-contactly-ws-dev-ConnectLambdaFunctionQualifiedArn"
+      }
+    },
+    "ServiceEndpointWebsocket": {
+      "Description": "URL of the service endpoint",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "wss://",
+            {
+              "Ref": "WebsocketsApi"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/dev"
+          ]
+        ]
+      },
+      "Export": {
+        "Name": "sls-contactly-ws-dev-ServiceEndpointWebsocket"
+      }
+    }
+  }
+}

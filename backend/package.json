@@ -1,0 +1,19 @@
+{
+  "name": "contactly-backend",
+  "version": "0.0.1",
+  "description": "",
+  "author": "Rick Chi",
+  "license": "MIT",
+  "scripts": {
+    "domain:dev:create": "serverless create_domain --stage dev --config ./src/ws/serverless.yml",
+    "domain:dev:delete": "serverless delete_domain --stage dev --config ./src/ws/serverless.yml",
+    "deploy:ws:dev": "serverless deploy --stage dev --config ./src/ws/serverless.yml",
+    "remove:ws:dev": "serverless remove --stage dev --config ./src/ws/serverless.yml"
+  },
+  "devDependencies": {
+    "serverless-domain-manager": "^5.1.0",
+    "serverless-dotenv-plugin": "^3.9.0",
+    "serverless-go-plugin": "^2.0.1",
+    "serverless-localstack": "^0.4.32"
+  }
+}

@@ -1,0 +1,47 @@
+service: contactly-ws
+
+frameworkVersion: "2"
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-localstack
+  - serverless-go-plugin
+  - serverless-domain-manager
+
+provider:
+  name: aws
+  runtime: go1.x
+  stage: ${env:STAGE}
+  region: us-east-1
+  profile: default
+  lambdaHashingVersion: 20201221
+
+custom:
+  stackPath: src/ws/functions
+  certificateNames:
+    prod: "*.getcontactly.com"
+    dev: "*.dev.getcontactly.com"
+  domains:
+    prod: ws.getcontactly.com
+    dev: ws.dev.getcontactly.com
+  customDomain:
+    websocket:
+      domainName: ${self:custom.domains.${self:provider.stage}}
+      createRoute53Record: true
+      certificateName: ${self:custom.certificateNames.${self:provider.stage}}
+      basePath: ""
+      endpointType: "regional"
+  localstack:
+    debug: true
+    stages:
+      - local
+    host: http://localhost
+
+functions:
+  auth:
+    handler: src/shared/authorizer/handler.go
+  connect:
+    handler: ${self:custom.stackPath}/connect/handler.go
+    events:
+      - websocket:
+          route: $connect
