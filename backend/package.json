@@ -5,10 +5,10 @@
   "author": "Rick Chi",
   "license": "MIT",
   "scripts": {
-    "domain:dev:create": "serverless create_domain --stage dev --config ./src/ws/serverless.yml",
-    "domain:dev:delete": "serverless delete_domain --stage dev --config ./src/ws/serverless.yml",
-    "deploy:ws:dev": "serverless deploy --stage dev --config ./src/ws/serverless.yml",
-    "remove:ws:dev": "serverless remove --stage dev --config ./src/ws/serverless.yml"
+    "domain:dev:create": "serverless create_domain --stage dev --config ./src/api/ws/serverless.yml",
+    "domain:dev:delete": "serverless delete_domain --stage dev --config ./src/api/ws/serverless.yml",
+    "deploy:ws:dev": "serverless deploy --stage dev --config ./src/api/ws/serverless.yml",
+    "remove:ws:dev": "serverless remove --stage dev --config ./src/api/ws/serverless.yml"
   },
   "devDependencies": {
     "serverless-domain-manager": "^5.1.0",

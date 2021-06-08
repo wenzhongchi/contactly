@@ -3,7 +3,8 @@ package entities
 import (
 	"time"
 
-	"github.com/google/uuid"
+	validation "github.com/go-ozzo/ozzo-validation"
+	"github.com/wenzhongchi/contactly/backend/src/config"
 )
 
 type Connection struct {
@@ -16,23 +17,22 @@ type Connection struct {
 	DeletedAt    *time.Time
 }
 
-func CreateConnection(connectionID string, userID ID) (*Connection, error) {
+func NewConnection(connectionID string, userID ID) (*Connection, error) {
 	c := &Connection{
-		ID:           UUID(),
+		ID:           NewUUID(),
 		ConnectionID: connectionID,
 		UserID:       userID,
 	}
 
 	err := c.Validate()
 	if err != nil {
-		return nil, ErrInvalidEntity
+		return nil, config.ErrInvalidEntity
 	}
 	return c, nil
 }
 
 func (c *Connection) Validate() error {
-	if c.ConnectionID == "" || c.UserID == uuid.Nil {
-		return ErrInvalidEntity
-	}
-	return nil
+	return validation.ValidateStruct(&c,
+		validation.Field(&c.ConnectionID, validation.Required),
+		validation.Field(&c.UserID, validation.Required))
 }

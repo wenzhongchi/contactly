@@ -16,7 +16,7 @@ type ConnectionRepo struct {
 	DB *gorm.DB
 }
 
-func CreateConnectionRepository(db *gorm.DB) ConnectionRepository {
+func NewConnectionRepository(db *gorm.DB) ConnectionRepository {
 	return &ConnectionRepo{
 		DB: db,
 	}

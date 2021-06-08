@@ -3,6 +3,8 @@ package entities
 import (
 	"time"
 
+	validation "github.com/go-ozzo/ozzo-validation"
+	"github.com/wenzhongchi/contactly/backend/src/config"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -26,12 +28,10 @@ type User struct {
 	DeletedAt       *time.Time
 }
 
-func CreateUser(phone string, password string, firstName string, lastName string) (*User, error) {
+func NewUser(phone string, password string) (*User, error) {
 	u := &User{
-		ID:        UUID(),
-		Phone:     phone,
-		FirstName: firstName,
-		LastName:  lastName,
+		ID:    NewUUID(),
+		Phone: phone,
 	}
 
 	pwd, err := generatePassword(password)
@@ -42,7 +42,7 @@ func CreateUser(phone string, password string, firstName string, lastName string
 	u.Password = pwd
 	err = u.Validate()
 	if err != nil {
-		return nil, ErrInvalidEntity
+		return nil, config.ErrInvalidEntity
 	}
 
 	return u, nil
@@ -65,11 +65,9 @@ func (u *User) ValidatePassword(hash string) error {
 }
 
 func (u *User) Validate() error {
-	if u.Phone == "" || u.FirstName == "" || u.LastName == "" || u.Password == "" {
-		return ErrInvalidEntity
-	}
-
-	return nil
+	return validation.ValidateStruct(&u,
+		validation.Field(&u.Phone, validation.Required),
+		validation.Field(&u.Password, validation.Required))
 }
 
 func (u *User) GetID() string {

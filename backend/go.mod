@@ -5,6 +5,7 @@ go 1.16
 require (
 	github.com/aws/aws-lambda-go v1.24.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
+	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible // indirect
 	github.com/google/uuid v1.2.0 // indirect
 	github.com/jackc/pgproto3/v2 v2.0.7 // indirect
 	github.com/lib/pq v1.6.0 // indirect

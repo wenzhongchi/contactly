@@ -45,7 +45,7 @@ func (h *Handler) handleRequest(_ context.Context, req *events.APIGatewayWebsock
 
 func main() {
 	conn := services.ConnectDB()
-	userRepo := repositories.CreateUserRepository(conn)
+	userRepo := repositories.NewUserRepository(conn)
 	handler := &Handler{userRepo: userRepo}
 
 	lambda.Start(handler.handleRequest)

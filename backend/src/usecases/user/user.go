@@ -6,19 +6,37 @@ import (
 )
 
 type UserUsecase interface {
-	CreateUser(phone, password, firstName, lastName string) (entities.User, error)
+	Auth(phone, password string) (entities.User, error)
+	Register(phone, password string) (entities.User, error)
+	VerifyPhone(phone, code string) (entities.User, error)
 }
 
 type UserService struct {
 	userRepo repositories.UserRepository
 }
 
-func CreateUserUsecase(u repositories.UserRepository) *UserService {
+func NewUserUsecase(u repositories.UserRepository) *UserService {
 	return &UserService{userRepo: u}
 }
 
-func (u *UserService) CreateUser(phone, password, firstName, lastName string) (entities.User, error) {
-	user, err := entities.CreateUser(phone, password, firstName, lastName)
+func (u *UserService) Auth(phone, password string) (entities.User, error) {
+	user, err := entities.NewUser(phone, password)
+	if err != nil {
+		return *user, err
+	}
+	return u.userRepo.Create(user)
+}
+
+func (u *UserService) Register(phone, password string) (entities.User, error) {
+	user, err := entities.NewUser(phone, password)
+	if err != nil {
+		return *user, err
+	}
+	return u.userRepo.Create(user)
+}
+
+func (u *UserService) VerifyPhone(phone, code string) (entities.User, error) {
+	user, err := entities.NewUser(phone, code)
 	if err != nil {
 		return *user, err
 	}

@@ -4,7 +4,7 @@ import "github.com/google/uuid"
 
 type ID = uuid.UUID
 
-func UUID() ID {
+func NewUUID() ID {
 	return ID(uuid.New())
 }
 
