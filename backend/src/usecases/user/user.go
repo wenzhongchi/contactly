@@ -19,7 +19,7 @@ func NewUserUsecase(u repositories.UserRepository) *UserService {
 	return &UserService{userRepo: u}
 }
 
-func (u *UserService) Auth(phone, password string) (entities.User, error) {
+func (u *UserService) Login(phone, password string) (entities.User, error) {
 	user, err := entities.NewUser(phone, password)
 	if err != nil {
 		return *user, err
