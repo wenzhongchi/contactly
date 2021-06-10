@@ -3,7 +3,7 @@ import React from "react";
 import { Card } from "@contactly-ui/card";
 import { Flex } from "@contactly-ui/flex";
 import { Button } from "@contactly-ui/button";
-import IconPlus from "@contactly-ui/icons/dist/icons/plus";
+import IconPlus from "@contactly-ui/icons/dist/icons/Plus";
 
 import { ConversationType } from "@type/types";
 

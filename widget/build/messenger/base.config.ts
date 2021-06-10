@@ -25,6 +25,7 @@ const config: Configuration = {
                             "@babel/preset-react",
                             "@babel/preset-typescript",
                         ],
+                        plugins: ["@babel/transform-runtime"],
                     },
                 },
             },
@@ -33,10 +34,10 @@ const config: Configuration = {
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
         alias: {
-            "@type": path.resolve(__dirname, "../../src/types"),
+            "@type": path.resolve(__dirname, "../../../frontend/types"),
             "@constants": path.resolve(__dirname, "../../src/constants"),
-            "@components": path.resolve(__dirname, "../../src/components"),
-            "@icons": path.resolve(__dirname, "../../src/icons"),
+            "@components": path.resolve(__dirname, "../../../frontend/components"),
+            "@icons": path.resolve(__dirname, "../../../frontend/icons"),
         },
     },
 };

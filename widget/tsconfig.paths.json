@@ -2,10 +2,10 @@
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
-            "@type/*": ["./src/types/*"],
+            "@type/*": ["./../frontend/types/*"],
             "@constants/*": ["./src/constants/*"],
-            "@components/*": ["./src/components/*"],
-            "@icons/*": ["./src/icons/*"]
+            "@components/*": ["./../frontend/components/*"],
+            "@icons/*": ["./../frontend/icons/*"]
         }
     }
 }
