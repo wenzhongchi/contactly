@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import { NextPage } from "next";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import "yup-phone";
@@ -8,7 +7,6 @@ import { Flex } from "@contactly-ui/flex";
 import { Input } from "@contactly-ui/input";
 import { Button } from "@contactly-ui/button";
 import { IconLock } from "@contactly-ui/icons";
-
 import PhoneInput from "@components/PhoneInput/PhoneInput";
 
 const validationSchema = Yup.object({
@@ -21,7 +19,7 @@ const validationSchema = Yup.object({
         ),
 });
 
-const LoginPage: NextPage = () => {
+const RegisterForm: React.FC = () => {
     const { handleSubmit, handleChange, values, errors } = useFormik({
         initialValues: {
             phone: "",
@@ -33,24 +31,22 @@ const LoginPage: NextPage = () => {
         },
     });
 
-    const handleLogin = useCallback(() => handleSubmit, [handleSubmit]);
+    const handleRegister = useCallback(() => handleSubmit, [handleSubmit]);
 
     return (
-        <Flex flexDirection="row" width="100%" height="100vh">
-            <Flex bg="red" height="100%" width="50%" />
-            <Flex flexDirection="column" height="100%" width="50%" justifyContent="center">
-                <PhoneInput name="phone" onChange={handleChange} value={values.phone} width="40%" />
-                <Input
-                    name="password"
-                    onChange={handleChange}
-                    value={values.password}
-                    leftIcon={<IconLock />}
-                    width="40%"
-                />
-                <Button label="Login" onClick={handleLogin} width="40%" />
-            </Flex>
+        <Flex flexDirection="column" height="100%" width="50%" justifyContent="center">
+            <PhoneInput name="phone" onChange={handleChange} value={values.phone} width="40%" />
+            <Input
+                name="password"
+                onChange={handleChange}
+                value={values.password}
+                leftIcon={<IconLock />}
+                width="40%"
+            />
+            <Button label="Next" onClick={handleRegister} width="40%" />
+            {errors && (errors.phone || errors.password)}
         </Flex>
     );
 };
 
-export default LoginPage;
+export default RegisterForm;

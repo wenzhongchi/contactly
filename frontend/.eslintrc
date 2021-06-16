@@ -38,7 +38,16 @@
             "error",
             { "functions": false, "classes": false, "variables": true }
         ],
-        "import/no-extraneous-dependencies": "off"
+        "import/no-extraneous-dependencies": "off",
+        "@typescript-eslint/explicit-module-boundary-types": [
+            "error",
+            {
+                "allowedNames": ["render"]
+            }
+        ],
+        "@typescript-eslint/ban-ts-comment": "off",
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": ["error"]
     },
     "settings": {
         "import/resolver": {

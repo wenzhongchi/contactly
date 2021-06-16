@@ -10,6 +10,7 @@
     "clear": "rm -rf yarn-error.log && rm -rf node_modules && yarn install"
   },
   "dependencies": {
+    "@artsy/fresnel": "^1.7.0",
     "@contactly-ui/avatar": "file:.yalc/@contactly-ui/avatar",
     "@contactly-ui/button": "file:.yalc/@contactly-ui/button",
     "@contactly-ui/card": "file:.yalc/@contactly-ui/card",
@@ -17,13 +18,24 @@
     "@contactly-ui/flex": "file:.yalc/@contactly-ui/flex",
     "@contactly-ui/icons": "file:.yalc/@contactly-ui/icons",
     "@contactly-ui/input": "file:.yalc/@contactly-ui/input",
+    "@contactly-ui/stack": "file:.yalc/@contactly-ui/stack",
     "@contactly-ui/text": "file:.yalc/@contactly-ui/text",
     "@contactly-ui/theme": "file:.yalc/@contactly-ui/theme",
-    "next": "latest"
+    "axios": "^0.21.1",
+    "formik": "^2.2.9",
+    "isomorphic-unfetch": "^3.1.0",
+    "next": "latest",
+    "next-transpile-modules": "^7.3.0",
+    "normalize.css": "^8.0.1",
+    "qrcode.react": "^1.0.1",
+    "swr": "^0.5.6",
+    "yup": "^0.32.9",
+    "yup-phone": "^1.2.19"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
     "@types/node": "^15.6.1",
+    "@types/qrcode.react": "^1.0.1",
     "@types/react": "^17.0.8",
     "@types/react-dom": "^17.0.1",
     "@types/styled-components": "^5.1.9",

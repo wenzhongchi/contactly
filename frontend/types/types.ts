@@ -48,3 +48,30 @@ export type MessageType = {
     isOperator: boolean;
     date: Date;
 };
+
+export enum ProfileRowEnum {
+    EMAIL = "email",
+    PHONE = "phone",
+    ADDRESS = "address",
+    TIMEZONE = "timezone",
+    WECHAT = "wechat",
+}
+
+export type ProfileRowType = {
+    type: ProfileRowEnum;
+    title: string;
+    value: string;
+};
+
+export enum SidebarMenuEnum {
+    CHAT = "chat",
+    CALENDAR = "calendar",
+    CONTACT = "contact",
+    PROPERTY = "property",
+    BUILD = "build",
+    AGENT = "agent",
+    ANALYTIC = "analytic",
+    SETTING = "setting",
+    NOTIFICATION = "notification",
+    PROFILE = "profile",
+}

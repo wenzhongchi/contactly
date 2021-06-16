@@ -29,7 +29,7 @@ const Profile: React.FC = () => (
                 Queens NY
             </Text>
         </Flex>
-        <Flex mt="14px" mb="20px"></Flex>
+        <Flex mt="14px" mb="20px" />
     </Flex>
 );
 
