@@ -4,6 +4,7 @@ import { Flex } from "@contactly-ui/flex";
 import { Avatar } from "@contactly-ui/avatar";
 import { Stack } from "@contactly-ui/stack";
 
+import { SidebarMenuEnum } from "@type/types";
 import SidebarButton from "./SidebarButton";
 
 const Sidebar: React.FC = () => (
@@ -15,15 +16,16 @@ const Sidebar: React.FC = () => (
         width="60px"
     >
         <Stack direction="column" spacing="10px" mt="20px" width="100%">
-            <SidebarButton />
-            <SidebarButton />
-            <SidebarButton />
-            <SidebarButton />
+            <SidebarButton type={SidebarMenuEnum.CHAT} />
+            <SidebarButton type={SidebarMenuEnum.CALENDAR} />
+            <SidebarButton type={SidebarMenuEnum.PROPERTY} />
+            <SidebarButton type={SidebarMenuEnum.AGENT} />
+            <SidebarButton type={SidebarMenuEnum.BUILD} />
         </Stack>
         <Stack direction="column" spacing="10px" mb="20px" width="100%">
-            <SidebarButton />
-            <SidebarButton />
-            <SidebarButton />
+            <SidebarButton type={SidebarMenuEnum.SETTING} />
+            <SidebarButton type={SidebarMenuEnum.NOTIFICATION} />
+            <SidebarButton type={SidebarMenuEnum.PROFILE} />
             <Flex justifyContent="center" alignItems="center">
                 <Avatar
                     variant="sm"

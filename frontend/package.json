@@ -25,7 +25,7 @@
     "formik": "^2.2.9",
     "isomorphic-unfetch": "^3.1.0",
     "next": "latest",
-    "next-transpile-modules": "^7.3.0",
+    "next-transpile-modules": "^8.0.0",
     "normalize.css": "^8.0.1",
     "qrcode.react": "^1.0.1",
     "swr": "^0.5.6",
